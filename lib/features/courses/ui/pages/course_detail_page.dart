@@ -1,7 +1,7 @@
 import 'package:f_clean_template/features/courses/ui/controller/course_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:f_clean_template/core/app_theme.dart'; 
+import 'package:f_clean_template/core/app_theme.dart';
 
 class CourseDetailPage extends StatefulWidget {
   final String courseId;
@@ -78,22 +78,16 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
               runSpacing: 12,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                
+              ],
+            ),
 
-            Text('Actividades',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(fontWeight: FontWeight.w800)),
+            const SizedBox(height: 20),
+            // Actividades
             const SizedBox(height: 12),
 
-            if (activities.isEmpty)
-              const Center(child: Text('No hay actividades en esta categoría'))
-            else
               GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: activities.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 12,
@@ -101,7 +95,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                   childAspectRatio: 1.2,
                 ),
                 itemBuilder: (context, index) {
-                  final a = activities[index];
                   return Card(
                     color: cardBg,
                     elevation: 2,
@@ -125,11 +118,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                             Icon(Icons.assignment_outlined,
                                 size: 28, color: accent),
                             const SizedBox(height: 8),
-                            Text(a.name,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.copyWith(fontWeight: FontWeight.w700)),
                             const Spacer(),
                             Align(
                               alignment: Alignment.bottomRight,
