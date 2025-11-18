@@ -8,7 +8,6 @@ import '../controller/course_controller.dart';
 import 'add_course_student_page.dart';
 import 'add_course_teacher_page.dart';
 import 'course_detail_teacher_page.dart';
-import 'package:f_clean_template/features/categories/ui/pages/add_category_page.dart';
 import 'package:f_clean_template/features/courses/domain/models/course.dart';
 
 enum UserRole { profesor, estudiante }
@@ -169,7 +168,6 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                   onCreateCategory: isProfesor
                                       ? () {
-                                          Get.to(() => const AddCategoryPage());
                                         }
                                       : null,
                                 ),

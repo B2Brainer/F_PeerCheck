@@ -22,8 +22,6 @@ import 'features/courses/domain/repositories/i_course_repository.dart';
 import 'features/courses/domain/use_case/course_usecase.dart';
 import 'features/courses/ui/controller/course_controller.dart';
 
-// Categories
-import 'features/categories/ui/controller/category_controller.dart';
 
 void main() {
   Loggy.initLoggy(logPrinter: const PrettyPrinter(showColors: true));
@@ -50,11 +48,6 @@ void initDependencies() {
   Get.put<ICourseRepository>(CourseRepository(Get.find()));
   Get.put(CourseUseCase(Get.find()));
   Get.lazyPut(() => CourseController());
-
-  // Categories
-  Get.put(
-    CategoryController(),
-  ); // ✅ Este es el controlador que necesitas que esté disponible globalmente
 }
 
 class MyApp extends StatelessWidget {
