@@ -182,7 +182,12 @@ class CourseController extends GetxController {
       );
       return;
     }
-    }
+
+    logInfo("CourseController: Enroll user ${user.email} in course $courseId");
+    await courseUseCase.enrollUser(courseId, user.email);
+    await getTeacherCourses();
+    await getStudentCourses();
+  }
 
   void unenrollUser(String courseId) async {
     final user = authController.currentUser.value;

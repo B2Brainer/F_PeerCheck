@@ -6,9 +6,9 @@ import 'package:loggy/loggy.dart';
 
 import '../../../auth/ui/controller/authentication_controller.dart';
 import '../controller/course_controller.dart';
-import 'add_course_teacher_page.dart';
-import 'course_enrollment_page.dart';
 import 'add_course_student_page.dart';
+import 'course_enrollment_page.dart';
+import 'add_course_teacher_page.dart';
 import 'package:f_clean_template/features/categories/ui/pages/add_category_page.dart';
 import 'package:f_clean_template/features/courses/domain/models/course.dart';
 
