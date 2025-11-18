@@ -1,11 +1,7 @@
-import 'package:f_clean_template/features/courses/domain/models/activity.dart';
-import 'package:f_clean_template/features/courses/domain/models/category.dart';
 import 'package:f_clean_template/features/courses/ui/controller/course_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:f_clean_template/core/app_theme.dart'; // 👈 paleta
-import 'my_group_page.dart';
-import 'group_list_page.dart';
+import 'package:f_clean_template/core/app_theme.dart'; 
 
 class CourseDetailPage extends StatefulWidget {
   final String courseId;
@@ -25,14 +21,10 @@ class CourseDetailPage extends StatefulWidget {
 
 class _CourseDetailPageState extends State<CourseDetailPage> {
   final CourseController courseController = Get.find();
-  Category? _selectedCategory;
 
   @override
   void initState() {
     super.initState();
-    courseController.seedMockIfNeeded(widget.courseId);
-    final cats = courseController.getCategoriesForCourse(widget.courseId);
-    if (cats.isNotEmpty) _selectedCategory = cats.first;
   }
 
   @override
@@ -41,12 +33,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
     final Color accent = palette.estudianteAccent;
     final Color cardBg = palette.estudianteCard;
     final Color surface = palette.surfaceSoft;
-
-    final cats = courseController.getCategoriesForCourse(widget.courseId);
-    final group = courseController.getMyGroupForCourse(widget.courseId);
-    final activities = _selectedCategory == null
-        ? <Activity>[]
-        : courseController.getActivitiesForCategory(_selectedCategory!.id);
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -92,72 +78,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
               runSpacing: 12,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                // Categoría
-                SizedBox(
-                  width: 260,
-                  child: InputDecorator(
-                    decoration: InputDecoration(
-                      labelText: 'Categoría',
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: accent.withOpacity(.4)),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<Category>(
-                        isDense: true,
-                        value: _selectedCategory,
-                        items: cats
-                            .map((c) => DropdownMenuItem<Category>(
-                                  value: c,
-                                  child: Text(c.name),
-                                ))
-                            .toList(),
-                        onChanged: (c) => setState(() => _selectedCategory = c),
-                      ),
-                    ),
-                  ),
-                ),
-
-                // Mi grupo
-                ActionChip(
-                  avatar: Icon(Icons.group, color: Colors.white),
-                  backgroundColor: accent,
-                  label: Text(
-                    group?.name ?? 'Mi grupo',
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () {
-                    Get.to(() => MyGroupPage(
-                          courseId: widget.courseId,
-                          courseName: widget.courseName,
-                        ));
-                  },
-                ),
-
-                // Lista de grupos
-                OutlinedButton.icon(
-                  icon: Icon(Icons.groups_2_outlined, color: accent),
-                  label: Text('Lista de grupos', style: TextStyle(color: accent)),
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: accent),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  onPressed: () {
-                    Get.to(() => GroupListPage(
-                          courseId: widget.courseId,
-                          courseName: widget.courseName,
-                        ));
-                  },
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 20),
+                
 
             Text('Actividades',
                 style: Theme.of(context)

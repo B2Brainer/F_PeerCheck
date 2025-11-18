@@ -1,7 +1,3 @@
-import 'package:f_clean_template/features/courses/domain/models/activity.dart';
-import 'package:f_clean_template/features/courses/domain/models/category.dart';
-import 'package:f_clean_template/features/courses/domain/models/group.dart';
-import 'package:f_clean_template/features/courses/domain/models/member.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
@@ -16,13 +12,6 @@ class CourseController extends GetxController {
   final CourseUseCase courseUseCase = Get.find();
   final AuthenticationController authController = Get.find();
   final RxBool isLoading = false.obs;
-
-  final RxMap<String, List<Category>> _categoriesByCourse = <String, List<Category>>{}.obs;
-  final RxMap<String, List<Activity>> _activitiesByCategory = <String, List<Activity>>{}.obs;
-
-  final RxMap<String, GroupInfo> _myGroupByCourse = <String, GroupInfo>{}.obs;
-  final RxMap<String, List<GroupInfo>> _groupsByCourse = <String, List<GroupInfo>>{}.obs;
-  final RxMap<String, List<Member>> _membersByGroup = <String, List<Member>>{}.obs;
 
   List<Course> get teacherCourses => _teacherCourses;
   List<Course> get studentCourses => _studentCourses;
@@ -193,12 +182,7 @@ class CourseController extends GetxController {
       );
       return;
     }
-
-    logInfo("CourseController: Enroll user ${user.email} in course $courseId");
-    await courseUseCase.enrollUser(courseId, user.email);
-    await getTeacherCourses();
-    await getStudentCourses();
-  }
+    }
 
   void unenrollUser(String courseId) async {
     final user = authController.currentUser.value;
@@ -252,84 +236,6 @@ class CourseController extends GetxController {
   List<Course> getCurrentCourses(bool isTeacher) {
     return isTeacher ? _teacherCourses : _studentCourses;
   }
-  
-  /// Datos de prueba no usa repositorios
-  void seedMockIfNeeded(String courseId) {
-    if (!_categoriesByCourse.containsKey(courseId)) {
-      _categoriesByCourse[courseId] = const [
-        Category(id: 'cat-1', courseId: 'any', name: 'Investigación'),
-        Category(id: 'cat-2', courseId: 'any', name: 'Prácticas'),
-        Category(id: 'cat-3', courseId: 'any', name: 'Proyecto Final'),
-      ];
-    }
-
-    // Actividades por categoría
-    _activitiesByCategory.putIfAbsent('cat-1', () => const [
-          Activity(id: 'a-1', categoryId: 'cat-1', name: 'Actividad 1'),
-          Activity(id: 'a-2', categoryId: 'cat-1', name: 'Actividad 2'),
-        ]);
-    _activitiesByCategory.putIfAbsent('cat-2', () => const [
-          Activity(id: 'a-3', categoryId: 'cat-2', name: 'Actividad 3'),
-          Activity(id: 'a-4', categoryId: 'cat-2', name: 'Actividad 4'),
-        ]);
-    _activitiesByCategory.putIfAbsent('cat-3', () => const [
-          Activity(id: 'a-5', categoryId: 'cat-3', name: 'Actividad 5'),
-        ]);
-
-    // Grupo fijo (predefinido)
-    _myGroupByCourse[courseId] =
-        GroupInfo(id: 'g-3', courseId: courseId, name: 'Grupo #3');
-
-    // Lista de grupos de la clase
-    _groupsByCourse[courseId] = [
-      GroupInfo(id: 'g-1', courseId: courseId, name: 'Grupo #1'),
-      GroupInfo(id: 'g-2', courseId: courseId, name: 'Grupo #2'),
-      _myGroupByCourse[courseId]!,
-      GroupInfo(id: 'g-4', courseId: courseId, name: 'Grupo #4'),
-    ];
-
-    // Miembros por grupo (solo visual)
-    _membersByGroup.putIfAbsent('g-1', () => const [
-          Member(id: 'u1', name: 'Ana Pérez'),
-          Member(id: 'u2', name: 'Luis Gómez'),
-        ]);
-    _membersByGroup.putIfAbsent('g-2', () => const [
-          Member(id: 'u3', name: 'María Rojas'),
-          Member(id: 'u4', name: 'Camilo Díaz'),
-        ]);
-    _membersByGroup.putIfAbsent('g-3', () => const [
-          Member(id: 'u5', name: 'Tú'),
-          Member(id: 'u6', name: 'Carlos Silva'),
-          Member(id: 'u7', name: 'Valeria Mora'),
-        ]);
-    _membersByGroup.putIfAbsent('g-4', () => const [
-          Member(id: 'u8', name: 'Lucía Torres'),
-        ]);
-  }
-
-  List<Category> getCategoriesForCourse(String courseId) {
-    seedMockIfNeeded(courseId);
-    return _categoriesByCourse[courseId] ?? const [];
-  }
-
-  List<Activity> getActivitiesForCategory(String categoryId) {
-    return _activitiesByCategory[categoryId] ?? const [];
-  }
-
-  GroupInfo? getMyGroupForCourse(String courseId) {
-    seedMockIfNeeded(courseId);
-    return _myGroupByCourse[courseId];
-  }
-
-  List<GroupInfo> getGroupsForCourse(String courseId) {
-    seedMockIfNeeded(courseId);
-    return _groupsByCourse[courseId] ?? const [];
-  }
-
-  List<Member> getMembersByGroup(String groupId) {
-    return _membersByGroup[groupId] ?? const [];
-  }
-
 }
 
 
