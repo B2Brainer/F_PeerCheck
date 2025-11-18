@@ -67,11 +67,6 @@ class _HomePageState extends State<HomePage> {
             onPressed: _logout,
             tooltip: 'Cerrar sesión',
           ),
-          IconButton(
-            icon: const Icon(Icons.delete_forever, color: Colors.black87),
-            onPressed: () => courseController.deleteCourses(),
-            tooltip: 'Eliminar todos los cursos',
-          ),
         ],
       ),
       body: SafeArea(
