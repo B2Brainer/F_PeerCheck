@@ -1,5 +1,4 @@
 import 'package:f_clean_template/core/app_theme.dart';
-import 'package:f_clean_template/features/courses/ui/pages/course_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
@@ -7,8 +6,8 @@ import 'package:loggy/loggy.dart';
 import '../../../auth/ui/controller/authentication_controller.dart';
 import '../controller/course_controller.dart';
 import 'add_course_student_page.dart';
-import 'course_enrollment_page.dart';
 import 'add_course_teacher_page.dart';
+import 'course_detail_teacher_page.dart';
 import 'package:f_clean_template/features/categories/ui/pages/add_category_page.dart';
 import 'package:f_clean_template/features/courses/domain/models/course.dart';
 
@@ -153,10 +152,10 @@ class _HomePageState extends State<HomePage> {
                                       );
                                     } else {
                                       Get.to(
-                                        () => CourseDetailPage(
+                                        () => CourseEnrollmentPage(
                                           courseId: course.id,
                                           courseName: course.name,
-                                          teacherEmail: course.teacher,
+                                          courseCode: course.nrc.toString(),
                                         ),
                                       );
                                     }
