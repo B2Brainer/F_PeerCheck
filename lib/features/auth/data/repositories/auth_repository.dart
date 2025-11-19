@@ -14,10 +14,7 @@ class AuthRepository implements IAuthRepository {
 
   @override
   Future<AuthenticationUser> signup(
-    String name,
-    String email,
-    String password,
-  ) {
+      String name, String email, String password) {
     return source.signup(name, email, password);
   }
 
@@ -27,7 +24,7 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  AuthenticationUser? getCurrentUser() {
-    return source.getCurrentUser();
+  Future<AuthenticationUser?> getCurrentUser() {
+    return source.getCurrentUser(); // ✔
   }
 }

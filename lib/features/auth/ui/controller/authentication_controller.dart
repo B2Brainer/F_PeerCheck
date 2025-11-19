@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:f_clean_template/features/auth/domain/models/authentication_user.dart';
 import 'package:f_clean_template/features/auth/domain/use_case/authentication_usecase.dart';
@@ -10,14 +11,28 @@ class AuthenticationController extends GetxController {
 
   final Rxn<AuthenticationUser> currentUser = Rxn<AuthenticationUser>();
   final RxBool isLoading = false.obs;
+  final RxBool rememberMe = false.obs;
 
   bool get isLogged => currentUser.value != null;
 
+  @override
+  void onInit() {
+    super.onInit();
+    loadRememberedCredentials();
+    _loadSavedSession();
+  }
+
+  // --------------------------------------------------------
+  // LOGIN
+  // --------------------------------------------------------
   Future<void> login(String email, String password) async {
     try {
       isLoading.value = true;
+
       final user = await useCase.login(email, password);
       currentUser.value = user;
+
+      await _saveSession(user);
 
       if (rememberMe.value) {
         await saveRememberedCredentials(email, password);
@@ -31,11 +46,18 @@ class AuthenticationController extends GetxController {
     }
   }
 
+  // --------------------------------------------------------
+  // SIGNUP
+  // --------------------------------------------------------
   Future<void> signup(String name, String email, String password) async {
     try {
       isLoading.value = true;
+
       final user = await useCase.signup(name, email, password);
       currentUser.value = user;
+
+      await _saveSession(user);
+
     } catch (e) {
       rethrow;
     } finally {
@@ -43,13 +65,41 @@ class AuthenticationController extends GetxController {
     }
   }
 
+  // --------------------------------------------------------
+  // LOGOUT
+  // --------------------------------------------------------
   Future<void> logOut() async {
     await useCase.logout();
     currentUser.value = null;
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove("current_user");
   }
 
-  // 🔹 Remember me
-  final RxBool rememberMe = false.obs;
+  // --------------------------------------------------------
+  // SAVE SESSION (GUARDA USUARIO + TOKENS)
+  // --------------------------------------------------------
+  Future<void> _saveSession(AuthenticationUser user) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("current_user", jsonEncode(user.toJson()));
+  }
+
+  // --------------------------------------------------------
+  // AUTO-LOGIN SI EXISTE SESIÓN
+  // --------------------------------------------------------
+  Future<void> _loadSavedSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    final raw = prefs.getString("current_user");
+
+    if (raw != null) {
+      final json = jsonDecode(raw);
+      currentUser.value = AuthenticationUser.fromJson(json);
+    }
+  }
+
+  // --------------------------------------------------------
+  // REMEMBER ME
+  // --------------------------------------------------------
   String? rememberedEmail;
   String? rememberedPassword;
 

@@ -11,10 +11,7 @@ class AuthenticationUseCase {
   }
 
   Future<AuthenticationUser> signup(
-    String name,
-    String email,
-    String password,
-  ) {
+      String name, String email, String password) {
     return repository.signup(name, email, password);
   }
 
@@ -22,7 +19,7 @@ class AuthenticationUseCase {
     return repository.logout();
   }
 
-  AuthenticationUser? getCurrentUser() {
-    return repository.getCurrentUser();
+  Future<AuthenticationUser?> getCurrentUser() {
+    return repository.getCurrentUser(); // ✔
   }
 }
